@@ -31,7 +31,7 @@ st.title("🛒 Firebase Cart Admin Panel")
 username = st.text_input("Username")
 password = st.text_input("Password", type="password")
 
-if username == "Admin" and password == "0000":
+if username == st.secrets["auth"]["username"] and password == st.secrets["auth"]["password"]:
     st.success("✅ Logged in as Admin")
 
     # Two columns for Add and Delete
