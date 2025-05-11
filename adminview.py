@@ -2,7 +2,7 @@ import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, db
 
-# --- Load service account info from secrets ---
+
 service_account_info = {
     "type": "service_account",
     "project_id": st.secrets["type"]["project_id"],
@@ -17,20 +17,20 @@ service_account_info = {
     "universe_domain": st.secrets["type"]["universe_domain"],
 }
 
-# --- Initialize Firebase only once ---
+# Initialize Firebase only once 
 if not firebase_admin._apps:
     cred = credentials.Certificate(service_account_info)
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://read-write-e65d9-default-rtdb.firebaseio.com/"
     })
 
-# --- Session state initialization ---
+# Session state initialization 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "login_attempted" not in st.session_state:
     st.session_state.login_attempted = False
 
-# --- Login Form ---
+#--------------------------------------------------------------------------------------- Admin LOGIN ---------------------------------------------------------------------------------------#
 if not st.session_state.logged_in:
     st.title("🛒 Firebase Cart Admin Panel")
     with st.form("login_form"):
@@ -50,7 +50,7 @@ if not st.session_state.logged_in:
     if st.session_state.login_attempted and not st.session_state.logged_in:
         st.error("❌ Invalid credentials")
 
-# --- Admin Panel ---
+#--------------------------------------------------------------------------------------- Admin Panel ---------------------------------------------------------------------------------------#
 if st.session_state.logged_in:
     st.title("🛒 Firebase Cart Admin Panel")
     st.success("✅ Logged in as Admin")
@@ -59,7 +59,7 @@ if st.session_state.logged_in:
     # Two columns for Add and Delete
     add_col, delete_col = st.columns(2)
 
-    # --- Add New Cart ---
+#--------------------------------------------------------------------------------------- Add New Cart ---------------------------------------------------------------------------------------#
     with add_col:
         st.subheader("➕ Add New Cart")
         new_cart_id = st.text_input("Enter new cart ID", key="add")
@@ -71,7 +71,7 @@ if st.session_state.logged_in:
             else:
                 st.warning("⚠️ Please enter a valid cart ID.")
 
-    # --- Delete Existing Cart ---
+#------------------------------------------------------------------------------------ Delete Existing Cart ------------------------------------------------------------------------------------#
     with delete_col:
         st.subheader("🗑️ Delete a Cart")
         cart_to_delete = st.text_input("Enter cart ID to delete", key="delete")
@@ -83,7 +83,7 @@ if st.session_state.logged_in:
             else:
                 st.warning("⚠️ Please enter a cart ID to delete.")
 
-    # --- View All Carts ---
+#--------------------------------------------------------------------------------------- View All Carts ---------------------------------------------------------------------------------------#
     st.markdown("---")
     st.subheader("📋 All Existing Carts")
     rfid_ref = db.reference("rfid_tags")
